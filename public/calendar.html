@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<title>Calendar</title>
+
+<link
+rel="stylesheet"
+href="style.css">
+
+<style>
+
+.box{
+
+width:600px;
+
+margin:auto;
+
+padding:20px;
+
+background:white;
+
+box-shadow:
+0 0 10px #ddd;
+
+margin-top:40px;
+
+}
+
+</style>
+
+</head>
+
+<body>
+<a href="index.html" style="
+display:inline-block;
+margin:20px;
+padding:10px 20px;
+background:#0b3d91;
+color:white;
+text-decoration:none;
+border-radius:5px;
+">
+← Back to Home
+</a>
+<div class="box">
+
+<h2>
+
+📅 Booking Calendar
+
+</h2>
+
+<input
+type="date"
+id="travelDate">
+
+<button
+onclick="saveDate()">
+
+Save
+
+</button>
+
+<div id="result">
+
+</div>
+
+</div>
+
+<script>
+
+function saveDate(){
+
+let d=
+
+document
+.getElementById(
+'travelDate'
+).value;
+
+document
+.getElementById(
+'result'
+).innerHTML=
+
+"Saved : "+d;
+
+}
+
+</script>
+
+</body>
+
+</html>

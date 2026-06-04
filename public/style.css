@@ -1,0 +1,113 @@
+body { font-family: Arial; margin:0; background-image:#f4f4f4; }
+header { background: rgb(255, 251, 0); padding:10px; display:flex; align-items:center; gap:10px; }
+.logo { height:60px; }
+nav { background:#000; padding:10px; text-align:center; }
+nav a { color:#fff; margin:0 20px; text-decoration:none; }
+.search { padding:20px; text-align:center; }
+.search input, button { padding:10px; margin:15px; }
+footer { background:#111; color:white; text-align:center; padding:10px; }
+.brand { color: limegreen; text-decoration:none; }
+
+.topbar{
+
+background:#fff000;
+
+padding:10px 30px;
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+position:relative;
+
+}
+
+.leftbox{
+
+display:flex;
+
+gap:15px;
+
+align-items:center;
+
+}
+
+.logo{
+
+width:135px;
+
+height:75px;
+
+}
+
+.rightbox{
+
+position:relative;
+
+}
+
+#panelBtn{
+
+padding:20px 20px;
+
+cursor:pointer;
+
+border:1px solid #999;
+
+background:white;
+
+}
+
+.menu{
+
+position:absolute;
+
+right:0;
+
+top:45px;
+
+width:260px;
+
+background:white;
+
+box-shadow:
+0 0 15px rgba(
+0,0,0,.2
+);
+
+display:none;
+
+z-index:99999;
+
+}
+
+.menu a{
+
+display:block;
+
+padding:14px;
+
+border-bottom:
+1px solid #eee;
+
+text-decoration:none;
+
+color:rgb(46, 1, 247);
+
+font-size:20px;
+
+}
+
+.menu a:hover{
+
+background:#f3f3f3;
+
+}
+
+.menu.show{
+
+display:block;
+
+}

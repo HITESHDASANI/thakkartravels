@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <title>Add Flight</title>
+
+</head>
+
+<body>
+
+    <h2>Add Flight</h2>
+
+    <input type="text" id="airline" placeholder="Airline"><br><br>
+
+    <input type="text" id="flightNo" placeholder="Flight No"><br><br>
+
+    <input type="text" id="origin" placeholder="Origin"><br><br>
+
+    <input type="text" id="destination" placeholder="Destination"><br><br>
+
+    <input type="text" id="departure" placeholder="Departure"><br><br>
+
+    <input type="text" id="arrival" placeholder="Arrival"><br><br>
+
+    <input type="number" id="baseFare" placeholder="Fare"><br><br>
+
+    <input type="number" id="seats" placeholder="Seats"><br><br>
+
+    <input type="date" id="date"><br><br>
+
+    <button onclick="addFlight()">
+
+        Add Flight
+
+    </button>
+
+<script>
+
+async function addFlight() {
+
+    try {
+
+        const res = await fetch('/admin/add-flight', {
+
+    method: 'POST',
+
+    credentials: 'include',
+
+    headers: {
+
+        'Content-Type': 'application/json'
+
+    },
+
+    body: JSON.stringify({
+
+        airline:
+            document.getElementById('airline').value,
+
+        flightNo:
+            document.getElementById('flightNo').value,
+
+        origin:
+            document.getElementById('origin').value,
+
+        destination:
+            document.getElementById('destination').value,
+
+        departure:
+            document.getElementById('departure').value,
+
+        arrival:
+            document.getElementById('arrival').value,
+
+        baseFare:
+            document.getElementById('baseFare').value,
+
+        seats:
+            document.getElementById('seats').value,
+
+        date:
+            document.getElementById('date').value
+
+    })
+
+});
+        const data = await res.json();
+
+        console.log(data);
+
+        alert(data.message);
+
+    }
+
+    catch(err){
+
+        console.log(err);
+
+        alert("Flight Add Failed ❌");
+
+    }
+
+}
+
+</script>
+
+</body>
+
+</html>

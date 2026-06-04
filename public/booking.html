@@ -1,0 +1,751 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Booking - Thakkar Travels</title>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<style>
+
+body{
+
+margin:0;
+padding:0;
+font-family:Arial;
+background:#f4f7fb;
+
+}
+
+.main-container{
+
+display:flex;
+gap:20px;
+padding:20px;
+
+}
+
+.left-section{
+
+width:70%;
+
+}
+
+.right-section{
+
+width:30%;
+
+}
+
+.card{
+
+background:white;
+padding:20px;
+margin-bottom:20px;
+border-radius:15px;
+box-shadow:0 2px 10px rgba(0,0,0,0.1);
+
+}
+
+.flight-header{
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+
+}
+
+.airline{
+
+font-size:28px;
+font-weight:bold;
+color:#0b3d91;
+
+}
+
+.route{
+
+font-size:24px;
+font-weight:bold;
+margin-top:15px;
+
+}
+
+.time{
+
+font-size:20px;
+color:#444;
+margin-top:10px;
+
+}
+
+.date{
+
+margin-top:10px;
+font-size:18px;
+color:gray;
+
+}
+
+.passenger-card{
+
+border:1px solid #eee;
+padding:15px;
+margin-top:15px;
+border-radius:10px;
+
+}
+
+.passenger-card input,
+.passenger-card select{
+
+width:100%;
+padding:12px;
+margin-top:10px;
+border:1px solid #ccc;
+border-radius:8px;
+
+}
+
+.fare-box{
+
+position:sticky;
+top:20px;
+
+}
+
+.total{
+
+font-size:32px;
+font-weight:bold;
+color:#0b3d91;
+
+}
+
+.pay-btn{
+
+width:100%;
+padding:15px;
+background:#ff6b35;
+border:none;
+color:white;
+font-size:18px;
+border-radius:10px;
+cursor:pointer;
+margin-top:20px;
+
+}
+
+.pay-btn:hover{
+
+background:#e85a24;
+
+}
+
+.section-title{
+
+font-size:22px;
+font-weight:bold;
+margin-bottom:15px;
+
+}
+
+.balance-box{
+
+background:#0b3d91;
+color:white;
+padding:15px;
+border-radius:10px;
+margin-bottom:20px;
+font-size:20px;
+font-weight:bold;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="main-container">
+
+<div class="left-section">
+
+<div class="card">
+
+<div class="flight-header">
+
+<div>
+
+<div class="airline">
+
+✈️ Flight Details
+
+</div>
+
+<div
+class="route"
+id="routeText">
+
+CCU → DEL
+
+</div>
+
+<div
+class="time"
+id="timeText">
+
+19:15 → 21:40
+
+</div>
+
+<div
+class="date"
+id="dateText">
+
+2026-06-06
+
+</div>
+
+</div>
+
+<div>
+
+<h2 id="fareText">
+
+₹0
+
+</h2>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<div class="section-title">
+
+Passenger Details
+
+</div>
+
+<div id="passengerForms"></div>
+
+</div>
+
+<div class="card">
+
+<div class="section-title">
+
+Contact Details
+
+</div>
+
+<input
+type="text"
+id="contactName"
+placeholder="Contact Name">
+
+<br><br>
+
+<input
+type="text"
+id="contactMobile"
+placeholder="Mobile Number">
+
+<br><br>
+
+<input
+type="email"
+id="contactEmail"
+placeholder="Email Address">
+
+</div>
+
+</div>
+
+<div class="right-section">
+
+<div class="balance-box">
+
+Wallet Balance :
+₹<span id="balance">0</span>
+
+</div>
+
+<div class="card fare-box">
+
+<div class="section-title">
+
+Fare Summary
+
+</div>
+
+<p>
+
+Base Fare :
+₹<span id="baseFare"></span>
+
+</p>
+
+<p>
+
+Passengers :
+<span id="totalPax"></span>
+
+</p>
+
+<hr>
+
+<div class="total">
+
+₹<span id="grandTotal"></span>
+
+</div>
+
+<button
+class="pay-btn"
+onclick="confirmBooking()">
+
+Confirm Booking
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+const flight =
+JSON.parse(
+localStorage.getItem(
+"selectedFlight"
+)
+);
+
+const pax =
+JSON.parse(
+localStorage.getItem(
+"selectedPax"
+)
+) || {};
+
+const adults =
+Number(pax.adults || 1);
+
+const child =
+Number(pax.child || 0);
+
+const infant =
+Number(pax.infant || 0);
+
+const totalPax =
+adults + child + infant;
+
+const fare =
+Number(flight.fare || 0);
+
+const totalFare =
+fare * totalPax;
+
+// ================= SHOW FLIGHT =================
+
+document.getElementById(
+'routeText'
+).innerHTML =
+
+`${flight.origin} → ${flight.destination}`;
+
+document.getElementById(
+'timeText'
+).innerHTML =
+
+`${flight.depTime || flight.departure}
+→
+${flight.arrival}`;
+
+document.getElementById(
+'dateText'
+).innerHTML =
+
+flight.doj || flight.date;
+
+document.getElementById(
+'fareText'
+).innerHTML =
+
+`₹${totalFare}`;
+
+document.getElementById(
+'baseFare'
+).innerHTML = fare;
+
+document.getElementById(
+'totalPax'
+).innerHTML = totalPax;
+
+document.getElementById(
+'grandTotal'
+).innerHTML = totalFare;
+
+// ================= PASSENGER FORMS =================
+
+let html = "";
+
+// ADULT
+
+for(let i=1;i<=adults;i++){
+
+html += `
+
+<div class="passenger-card">
+
+<h3>Adult ${i}</h3>
+
+<select class="title">
+
+<option>Mr</option>
+<option>Mrs</option>
+
+</select>
+
+<input
+type="text"
+class="fname"
+placeholder="First Name"
+required>
+
+<input
+type="text"
+class="lname"
+placeholder="Last Name"
+required>
+
+<select class="gender">
+
+<option value="Male">Male</option>
+<option value="Female">Female</option>
+
+</select>
+
+<select class="ptype">
+
+<option value="Adult">Adult</option>
+
+</select>
+
+<label>Date of Birth</label>
+
+<input
+type="date"
+class="dob">
+
+</div>
+
+`;
+
+}
+
+// CHILD
+
+for(let i=1;i<=child;i++){
+
+html += `
+
+<div class="passenger-card">
+
+<h3>Child ${i}</h3>
+
+<select class="title">
+
+<option>Master</option>
+<option>Miss</option>
+
+</select>
+
+<input
+type="text"
+class="fname"
+placeholder="First Name"
+required>
+
+<input
+type="text"
+class="lname"
+placeholder="Last Name"
+required>
+
+<select class="gender">
+
+<option value="Male">Male</option>
+<option value="Female">Female</option>
+
+</select>
+
+<select class="ptype">
+
+<option value="Child">Child</option>
+
+</select>
+
+<label>Date of Birth</label>
+
+<input
+type="date"
+class="dob"
+required>
+
+</div>
+
+`;
+
+}
+
+// INFANT
+
+for(let i=1;i<=infant;i++){
+
+html += `
+
+<div class="passenger-card">
+
+<h3>Infant ${i}</h3>
+
+<select class="title">
+
+<option>Master</option>
+<option>Miss</option>
+
+</select>
+
+<input
+type="text"
+class="fname"
+placeholder="First Name"
+required>
+
+<input
+type="text"
+class="lname"
+placeholder="Last Name"
+required>
+
+<select class="gender">
+
+<option value="Male">Male</option>
+<option value="Female">Female</option>
+
+</select>
+
+<select class="ptype">
+
+<option value="Infant">Infant</option>
+
+</select>
+
+<label>Date of Birth</label>
+
+<input
+type="date"
+class="dob"
+required>
+
+</div>
+
+`;
+
+}
+
+document.getElementById(
+'passengerForms'
+).innerHTML = html;
+
+// ================= LOAD USER =================
+
+async function loadUser(){
+
+try{
+
+const res =
+await fetch(
+
+'/auth/me',
+
+{
+
+credentials:'include'
+
+}
+
+);
+
+const user =
+await res.json();
+
+document.getElementById(
+'balance'
+).innerHTML =
+
+user.balance || 0;
+
+}catch(err){
+
+console.log(err);
+
+}
+
+}
+
+loadUser();
+
+// ================= CONFIRM BOOKING =================
+
+async function confirmBooking(){
+
+const cards =
+document.querySelectorAll(
+'.passenger-card'
+);
+
+let passengers = [];
+
+cards.forEach((card,index)=>{
+
+const title =
+card.querySelector('.title').value;
+
+const fname =
+card.querySelector('.fname').value;
+
+const lname =
+card.querySelector('.lname').value;
+
+const dob =
+card.querySelector('.dob').value;
+
+const gender =
+card.querySelector('.gender').value;
+
+const type =
+card.querySelector('.ptype').value;
+
+passengers.push({
+
+title,
+
+firstName: fname,
+
+lastName: lname,
+
+name:
+`${title} ${fname} ${lname}`,
+
+dob,
+
+gender,
+
+type,
+
+seat:
+`${Math.floor(Math.random()*30)+1}A`
+
+});
+
+});
+
+console.log(passengers);
+
+const contactEmail =
+document.getElementById(
+'contactEmail'
+).value;
+
+const contactMobile =
+document.getElementById(
+'contactMobile'
+).value;
+
+const contactName =
+document.getElementById(
+'contactName'
+).value;
+
+const res =
+await fetch(
+
+'/booking/book-flight',
+
+{
+
+method:'POST',
+
+headers:{
+
+'Content-Type':'application/json'
+
+},
+
+credentials:'include',
+
+body:JSON.stringify({
+flightId: flight._id,
+flightData: flight,
+
+passengers,
+
+contactName,
+
+contactMobile,
+
+contactEmail
+
+})
+
+}
+
+);
+
+const data =
+await res.json();
+
+console.log(data);
+
+if(data.success){
+
+alert(
+'Booking Confirmed ✅'
+);
+
+window.location.href =
+
+`/ticket.html?pnr=${data.booking.pnr}`;
+
+}else{
+
+alert(
+data.error ||
+'Booking Failed'
+);
+
+}
+
+}
+
+</script>
+
+</body>
+
+</html>
+```

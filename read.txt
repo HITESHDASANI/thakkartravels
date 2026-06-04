@@ -1,0 +1,53 @@
+Version 2 on May 16, 2026, 1:37 PM
+Deployment ID
+AKfycbwnpYufhvmo5JOZ8EQUqvcp7MKixIsRf5FHZLYnrIkkJyBAHO05DKednfj2UiXiC-mQ
+Web app
+URL
+
+
+
+
+AKfycbw-0nNFmUVi9OBmqHmKvN2-3oRtMkuAk9K6wDe35djhSRQ-wHesRpCJzR3h057oVgyjMQ
+
+https://script.google.com/macros/s/AKfycbw-0nNFmUVi9OBmqHmKvN2-3oRtMkuAk9K6wDe35djhSRQ-wHesRpCJzR3h057oVgyjMQ/exec
+https://script.google.com/macros/s/AKfycbw-0nNFmUVi9OBmqHmKvN2-3oRtMkuAk9K6wDe35djhSRQ-wHesRpCJzR3h057oVgyjMQ/exec
+
+
+connect to google sheet
+
+https://script.google.com/macros/s/AKfycbwnpYufhvmo5JOZ8EQUqvcp7MKixIsRf5FHZLYnrIkkJyBAHO05DKednfj2UiXiC-mQ/exec
+
+cd D:\user-login\client
+npm run build
+npm start -- -p 3001   or
+npm run dev
+
+
+🎯 FINAL SETUP (BEST)
+Service	Command	Port
+Backend	node server.js	3000
+Frontend	npm run dev	3001
+
+
+dasanihitesh26_db_user      Shreevallab@12
+
+mongodb+srv://dasanihitesh26_db_user:Shreevallab@12@cluster0.xiwgak8.mongodb.net/?appName=Cluster0
+
+
+
+🔥 IMPORTANT CHECKLIST (DON’T MISS)
+✅ Backend must have:
+/auth/login
+/auth/me
+/admin/add-flight
+/admin/add-balance
+/booking/book-flight
+
+
+🔥 FINAL STRUCTURE
+public/
+├── login.html
+├── signup.html
+├── reset.html
+├── booking.html
+├── admin.html

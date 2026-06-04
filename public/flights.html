@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Flights Search</title>
+
+    <style>
+
+        body {
+
+            margin: 0;
+            padding: 20px;
+            font-family: Arial;
+            background: #f4f7fb;
+
+        }
+
+        nav {
+
+            margin-bottom: 20px;
+
+        }
+
+        nav a {
+
+            text-decoration: none;
+            background: #0b3d91;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+
+        }
+
+        .flight-top {
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            background: white;
+
+            padding: 20px;
+
+            border-radius: 15px;
+
+            margin-bottom: 20px;
+
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+
+        }
+
+        .left-search {
+
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+
+        }
+
+        .left-search button {
+
+            padding: 10px 15px;
+
+            border: none;
+
+            background: #0b3d91;
+
+            color: white;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+
+            margin-right: 10px;
+
+        }
+
+        .modify-btn {
+
+            background: #ff6b35;
+
+            color: white;
+
+            border: none;
+
+            padding: 12px 20px;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+
+        }
+
+        #currentDate {
+
+            font-size: 18px;
+            font-weight: bold;
+
+        }
+
+        table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+
+            background: white;
+
+            border-radius: 15px;
+
+            overflow: hidden;
+
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+
+        }
+
+        th {
+
+            background: #0b3d91;
+
+            color: white;
+
+            padding: 15px;
+
+            text-align: center;
+
+        }
+
+        td {
+
+            padding: 15px;
+
+            border-bottom: 1px solid #eee;
+
+            text-align: center;
+
+        }
+
+        tr:hover {
+
+            background: #f8f9ff;
+
+        }
+
+        .book-btn {
+
+            background: #ff6b35;
+
+            color: white;
+
+            border: none;
+
+            padding: 10px 15px;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+
+        }
+
+        .copy-btn {
+
+            background: #28a745;
+
+            color: white;
+
+            border: none;
+
+            padding: 8px 12px;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+
+        }
+
+       /* .source-badge {
+
+            padding: 5px 10px;
+
+            border-radius: 20px;
+
+            color: white;
+
+            font-size: 12px;
+
+            font-weight: bold;
+
+        }
+
+        .efly {
+
+            background: green;
+
+        }
+
+        .mongodb {
+
+            background: orange;
+
+        }*/
+
+    </style>
+
+</head>
+
+<body>
+
+<nav>
+
+    <a href="index.html">
+
+        ← Home
+
+    </a>
+
+</nav>
+
+<div class="flight-top">
+
+    <div class="left-search">
+
+        <div id="searchTitle"></div>
+
+        <div>
+
+            <button onclick="previousDay()">
+
+                ◀ Previous Day
+
+            </button>
+
+            <span id="currentDate"></span>
+
+            <button onclick="nextDay()">
+
+                Next Day ▶
+
+            </button>
+
+        </div>
+
+    </div>
+
+    <div>
+
+        <button
+        class="modify-btn"
+        onclick="modifySearch()">
+
+            Modify Search
+
+        </button>
+
+    </div>
+
+</div>
+
+<div id="flights"></div>
+
+<script>
+
+const params =
+new URLSearchParams(window.location.search);
+
+const origin =
+params.get('origin');
+
+const destination =
+params.get('destination');
+
+const departuredate =
+params.get('departuredate');
+
+const adults =
+Number(params.get('adults') || 1);
+
+const child =
+Number(params.get('child') || 0);
+
+const infant =
+Number(params.get('infant') || 0);
+
+let currentDate =
+new Date(departuredate);
+
+updateDate();
+
+function updateDate() {
+
+    document
+    .getElementById('currentDate')
+    .innerHTML =
+
+    currentDate
+    .toLocaleDateString('en-GB');
+
+}
+
+async function loadFlights() {
+
+    try {
+
+        document
+        .getElementById('searchTitle')
+        .innerHTML =
+
+        `
+
+        <div style="
+        font-size:34px;
+        font-weight:bold;
+        color:#0b3d91;
+        ">
+
+        ${origin.toUpperCase()} → ${destination.toUpperCase()}
+
+        </div>
+
+        <div style="
+        font-size:18px;
+        color:gray;
+        ">
+
+        Journey Date : ${departuredate}
+
+        </div>
+
+        `;
+
+        const response = await fetch(
+
+`/search-all?origin=${origin}&destination=${destination}&departuredate=${departuredate}`
+
+        );
+
+        const allFlights =
+        await response.json();
+
+        console.log(allFlights);
+
+        const container =
+        document.getElementById('flights');
+
+        if (!allFlights || allFlights.length === 0) {
+
+            container.innerHTML =
+
+            `<h2>No Flights Found ❌</h2>`;
+
+            return;
+
+        }
+
+        let html = `
+
+        <table>
+
+        <tr>
+
+            <th>Flight</th>
+            <th>Route</th>
+            <th>Date</th>
+            <th>Departure</th>
+            <th>Arrival</th>
+            <th>Seats</th>
+            <th>Fare</th>
+            <th>Action</th>
+
+        </tr>
+
+        `;
+
+        allFlights.forEach(flight => {
+
+            html += `
+
+            <tr>
+
+                <td>
+
+                    <b>
+
+                    ${flight.flight || flight.flightNo || '--'}
+
+                    </b>
+
+                </td>
+
+                <td>
+
+                    ${flight.origin || '--'}
+
+                    →
+
+                    ${flight.destination || '--'}
+
+                </td>
+
+                <td>
+
+                    ${flight.doj || flight.date || '--'}
+
+                </td>
+
+                <td>
+
+                    ${flight.depTime || flight.departure || '--'}
+
+                </td>
+
+                <td>
+
+                    ${flight.arrival || '--'}
+
+                </td>
+
+                <td>
+
+                    ${flight.pax || flight.seats || '--'}
+
+                </td>
+
+                <td>
+
+                    ₹${flight.fare || flight.total_fare || '--'}
+
+                </td>
+
+                
+
+                <td>
+
+                    <input
+                    type="checkbox"
+                    onclick='copyTripData(${JSON.stringify(flight)})'>
+
+                    <br><br>
+
+                    <button
+                    class="copy-btn"
+                    onclick='copyTripData(${JSON.stringify(flight)})'>
+
+                        📋 Copy
+
+                    </button>
+
+                    <br><br>
+
+                    <button
+                    class="book-btn"
+                    onclick='selectFlight(${JSON.stringify(flight)})'>
+
+                        Select
+
+                    </button>
+
+                </td>
+
+            </tr>
+
+            `;
+
+        });
+
+        html += `</table>`;
+
+        container.innerHTML = html;
+
+    }
+
+    catch (err) {
+
+        console.log(err);
+
+    }
+
+}
+
+function selectFlight(flight) {
+
+    localStorage.setItem(
+
+        "selectedFlight",
+
+        JSON.stringify({
+
+            airline:
+                flight.airline || "IndiGo",
+
+            flight:
+                flight.flight ||
+
+                flight.flightNo ||
+
+                "--",
+
+            flightNo:
+                flight.flightNo ||
+
+                flight.flight ||
+
+                "--",
+
+            origin:
+                flight.origin || "--",
+
+            destination:
+                flight.destination || "--",
+
+            depTime:
+                flight.depTime ||
+
+                flight.departure ||
+
+                "--",
+
+            departure:
+                flight.departure ||
+
+                flight.depTime ||
+
+                "--",
+
+            arrival:
+                flight.arrival || "--",
+
+            doj:
+                flight.doj ||
+
+                flight.date ||
+
+                "--",
+
+            date:
+                flight.date ||
+
+                flight.doj ||
+
+                "--",
+
+            fare:
+                Number(
+
+                    flight.fare ||
+
+                    flight.baseFare ||
+
+                    0
+
+                ),
+
+            baseFare:
+                Number(
+
+                    flight.baseFare ||
+
+                    flight.fare ||
+
+                    0
+
+                ),
+
+            seats:
+                Number(
+
+                    flight.pax ||
+
+                    flight.seats ||
+
+                    0
+
+                ),
+
+            source:
+                flight.source || "mongodb"
+
+        })
+
+    );
+
+    localStorage.setItem(
+
+        "selectedPax",
+
+        JSON.stringify({
+
+            adults,
+            child,
+            infant
+
+        })
+
+    );
+
+    window.location.href =
+    "/booking.html";
+
+}
+
+function previousDay() {
+
+    currentDate.setDate(
+    currentDate.getDate() - 1
+    );
+
+    reloadDay();
+
+}
+
+function nextDay() {
+
+    currentDate.setDate(
+    currentDate.getDate() + 1
+    );
+
+    reloadDay();
+
+}
+
+function reloadDay() {
+
+    let d =
+
+    currentDate
+    .toISOString()
+    .split('T')[0];
+
+    window.location =
+
+`flights.html?origin=${origin}&destination=${destination}&departuredate=${d}&adults=${adults}&child=${child}&infant=${infant}`;
+
+}
+
+function modifySearch() {
+
+    window.location =
+    "index.html";
+
+}
+
+function copyTripData(flight) {
+
+    const txt =
+
+`Flight : ${flight.flight || flight.flightNo || '--'}
+
+Route : ${flight.origin || '--'} → ${flight.destination || '--'}
+
+Date : ${flight.doj || flight.date || '--'}
+
+Departure : ${flight.depTime || flight.departure || '--'}
+
+Arrival : ${flight.arrival || '--'}
+
+Fare : ₹${flight.fare || flight.total_fare || '--'}
+
+Seats : ${flight.pax || flight.seats || '--'}`;
+
+    navigator.clipboard.writeText(txt);
+
+    alert("Flight Details Copied ✅");
+
+}
+
+loadFlights();
+
+</script>
+
+</body>
+</html>

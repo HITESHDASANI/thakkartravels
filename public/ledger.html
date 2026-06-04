@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<title>User Ledger</title>
+
+<style>
+
+body{
+
+    font-family:Arial;
+    background:#f5f5f5;
+    padding:20px;
+
+}
+
+table{
+
+    width:100%;
+    border-collapse:collapse;
+    background:white;
+
+}
+
+th{
+
+    background:#0b3d91;
+    color:white;
+
+}
+
+th,td{
+
+    padding:12px;
+    border:1px solid #ddd;
+    text-align:center;
+
+}
+
+.credit{
+
+    color:green;
+    font-weight:bold;
+
+}
+
+.debit{
+
+    color:red;
+    font-weight:bold;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h2>User Ledger</h2>
+
+<a href="index.html" style="
+display:inline-block;
+margin:20px 0;
+padding:10px 20px;
+background:#0b3d91;
+color:white;
+text-decoration:none;
+border-radius:5px;
+">
+
+← Back to Home
+
+</a>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Date</th>
+
+<th>Type</th>
+
+<th>Amount</th>
+
+<th>Before</th>
+
+<th>After</th>
+
+<th>Remark</th>
+
+</tr>
+
+</thead>
+
+<tbody id="ledgerBody">
+
+</tbody>
+
+</table>
+
+<script>
+
+async function loadLedger() {
+
+    const res = await fetch(
+
+        '/booking/wallet',
+
+        {
+
+            credentials: 'include'
+
+        }
+
+    );
+
+    const data = await res.json();
+
+    let html = "";
+
+    data.forEach(tx => {
+
+        html += `
+
+        <tr>
+
+            <td>
+
+                ${new Date(tx.createdAt)
+                    .toLocaleString()}
+
+            </td>
+
+            <td class="${tx.type === 'CREDIT'
+                ? 'credit'
+                : 'debit'}">
+
+                ${tx.type}
+
+            </td>
+
+            <td>
+
+                ₹${tx.amount}
+
+            </td>
+
+            <td>
+
+                ₹${tx.balanceBefore || 0}
+
+            </td>
+
+            <td>
+
+                ₹${tx.balanceAfter || 0}
+
+            </td>
+
+            <td>
+
+${
+    tx.pnr
+
+    ?
+
+    `<a href="/ticket.html?pnr=${tx.pnr}"
+
+        style="
+            color:#0b3d91;
+            font-weight:bold;
+            text-decoration:none;
+        ">
+
+        ${tx.remark}
+
+    </a>`
+
+    :
+
+    tx.remark || '--'
+}
+
+</td>
+
+        </tr>
+
+        `;
+
+    });
+
+    document.getElementById('ledgerBody')
+        .innerHTML = html;
+
+}
+
+loadLedger();
+
+</script>
+
+</body>
+
+</html>

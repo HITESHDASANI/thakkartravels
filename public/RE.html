@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Register</title>
+</head>
+
+<body>
+
+<h2>Agent Registration</h2>
+
+<input id="company" placeholder="Company Name">
+<br><br>
+
+<input id="mobile" placeholder="Mobile">
+<br><br>
+
+<input id="email" placeholder="Email">
+<br><br>
+
+<input
+    id="password"
+    type="password"
+    placeholder="Password">
+
+<br><br>
+
+<button onclick="registerUser()">
+    Register
+</button>
+
+<script>
+
+async function registerUser() {
+
+    const body = {
+
+        company:
+            document.getElementById('company').value,
+
+        mobile:
+            document.getElementById('mobile').value,
+
+        email:
+            document.getElementById('email').value,
+
+        password:
+            document.getElementById('password').value
+
+    };
+
+    const response = await fetch(
+
+        '/auth/register',
+
+        {
+
+            method: 'POST',
+
+            headers: {
+
+                'Content-Type':
+                    'application/json'
+
+            },
+
+            body:
+                JSON.stringify(body)
+
+        }
+
+    );
+
+    const data =
+        await response.json();
+
+    alert(data.message);
+
+}
+
+</script>
+
+</body>
+
+</html>

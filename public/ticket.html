@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Flight Ticket</title>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial;
+}
+
+body{
+    background:#f2f2f2;
+    padding:20px;
+}
+
+.ticket{
+    width:900px;
+    margin:auto;
+    background:white;
+    border:1px solid #ccc;
+    padding:20px;
+}
+
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-bottom:2px solid #ddd;
+    padding-bottom:10px;
+}
+
+.logo{
+    font-size:40px;
+    font-weight:bold;
+    color:#1f3c88;
+}
+
+.title{
+    text-align:right;
+}
+
+.title h2{
+    margin-bottom:5px;
+}
+
+.blue-bar{
+    margin-top:15px;
+    background:#1f3c88;
+    color:white;
+    padding:12px;
+    display:flex;
+    justify-content:space-between;
+}
+
+.section{
+    margin-top:20px;
+}
+
+.section-title{
+    background:#eee;
+    padding:10px;
+    border:1px solid #ccc;
+    font-weight:bold;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+table th,
+table td{
+    border:1px solid #ccc;
+    padding:10px;
+    text-align:center;
+}
+
+table th{
+    background:#f7f7f7;
+}
+
+.notes{
+    border:1px solid #ccc;
+    border-top:none;
+    padding:15px;
+    line-height:28px;
+    font-size:14px;
+}
+
+.barcode{
+    text-align:center;
+    margin-top:30px;
+}
+
+.buttons{
+    margin-top:25px;
+    text-align:center;
+}
+
+button{
+    padding:12px 25px;
+    border:none;
+    color:white;
+    cursor:pointer;
+    border-radius:5px;
+    font-size:16px;
+}
+
+.print-btn{
+    background:rgb(27, 3, 247);
+}
+
+.close-btn{
+    background:red;
+}
+.PDF-btn{
+    background:rgba(0, 255, 13, 0.904);
+}
+.total{
+    color:green;
+    font-size:20px;
+    font-weight:bold;
+}
+
+@media print{
+
+    .buttons{
+        display:none;
+    }
+
+    body{
+        background:rgb(109, 236, 4);
+        padding:0;
+    }
+
+    .ticket{
+        width:100%;
+        border:none;
+    }
+
+}.ticket{
+
+border-radius:12px;
+
+box-shadow:0 0 20px rgba(0,0,0,0.15);
+
+}
+
+table{
+
+font-size:14px;
+
+}
+
+.section-title{
+
+background:#1f3c88;
+
+color:white;
+
+}
+
+button{
+
+font-weight:bold;
+
+transition:0.3s;
+
+}
+
+button:hover{
+
+opacity:0.85;
+
+transform:scale(1.03);
+
+}
+
+
+/* ================= AIRLINE THEMES ================= */
+
+.indigo-theme .blue-bar{
+    background:#1f3c88;
+}
+
+.indigo-theme .logo{
+    color:#1f3c88;
+}
+
+.airindia-theme .blue-bar{
+    background:#c8102e;
+}
+
+.airindia-theme .logo{
+    color:#c8102e;
+}
+
+.spicejet-theme .blue-bar{
+    background:#e10600;
+}
+
+.spicejet-theme .logo{
+    color:#e10600;
+}
+
+.akasa-theme .blue-bar{
+    background:#5c2483;
+}
+
+.akasa-theme .logo{
+    color:#5c2483;
+}
+
+.vistara-theme .blue-bar{
+    background:#4b154b;
+}
+
+.vistara-theme .logo{
+    color:#4b154b;
+}
+@media print {
+
+    .buttons {
+
+        display: none !important;
+
+    }
+
+}
+
+</style>
+
+</head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<body>
+
+<div class="ticket">
+
+    <div class="header">
+
+        <div class="logo">
+            IndiGo
+        </div>
+        <img src="logo.png" class="logo" style="height:50px;">
+         <h2>Thakkar Travels</h2>
+         <p style="font-size:14px;color:#f80606;"></p>
+         
+         
+        <div class="title">
+            <h2>E-Ticket / Itinerary</h2>
+            <p>Booking Confirmed</p>
+            <p>PNR : <span id="pnr"></span></p>
+        </div>
+
+    </div>
+
+    <div class="blue-bar">
+
+        <div>
+            Trip ID :
+            <span id="tripId"></span>
+        </div>
+
+        <div>
+            Helpline :
+            0124 617 3838
+        </div>
+
+    </div>
+
+    <!-- Flight Details -->
+
+    <div class="section">
+
+        <div class="section-title">
+            Flight Details
+        </div>
+
+        <table>
+
+            <tr>
+                <th>From</th>
+                <th>To</th>
+                <th>Date</th>
+                <th>Flight</th>
+                <th>Departure</th>
+                <th>Arrival</th>
+            </tr>
+
+            <tr>
+                <td id="from"></td>
+                <td id="to"></td>
+                <td id="date"></td>
+                <td id="flightNo"></td>
+                <td id="departure"></td>
+                <td id="arrival"></td>
+            </tr>
+
+        </table>
+
+    </div>
+
+    <!-- Passenger -->
+
+    <div class="section">
+
+        <div class="section-title">
+            Passenger Details
+        </div>
+
+        <table>
+
+            <tr>
+
+    <th>#</th>
+
+    <th>Passenger Name</th>
+
+    <th>Type</th>
+
+    <th>Gender</th>
+
+    <th>Seat</th>
+
+    <th>Status</th>
+
+</tr>
+
+            <tbody id="passengerTable"></tbody>
+
+        </table>
+
+    </div>
+
+    <!-- Fare -->
+
+    <div class="section">
+
+        <div class="section-title">
+            Fare Details
+        </div>
+
+        <table>
+
+            <tr>
+                <th>Base Fare</th>
+                <th>Taxes</th>
+                <th>Total</th>
+            </tr>
+
+            <tr>
+                <td id="baseFare"></td>
+                <td id="taxes"></td>
+                <td class="total" id="totalFare"></td>
+            </tr>
+
+        </table>
+
+    </div>
+
+    <!-- Baggage -->
+
+    <div class="section">
+
+        <div class="section-title">
+            Baggage Details
+        </div>
+
+        <table>
+
+            <tr>
+                <th>Cabin</th>
+                <th>Check-In</th>
+            </tr>
+
+            <tr>
+                <td>7 KG</td>
+                <td>15 KG</td>
+            </tr>
+
+        </table>
+
+    </div>
+
+    <!-- Notes -->
+
+    <div class="section">
+
+        
+<table>
+
+            <tr><th><h2>Important Notes</h2></th>
+                <th><h2>CONTACT</h2></th>
+
+            </tr>
+                <td>
+
+            • Carry valid photo ID.<br>
+            • Reach airport 2 hours before departure.<br>
+            • Web check-in recommended.<br>
+            • Ticket non-refundable after departure.<br>
+
+                </td>
+                <td>
+
+                    <p style="font-size:14px;color:#555;"><h2>Thakkar Travels</h2> </p>
+                    <p style="font-size:14px;color:#555;">Address: 71, Canning Street, Kolkata, India  700001</p>
+                    <p style="font-size:14px;color:#555;">Phone: 9433090837</p>
+                    <p style="font-size:14px;color:#555;">Email: thakkartravels.dasani@gmail.com</p>
+            </tr>   
+        
+
+    </div>
+
+    <!-- Barcode -->
+
+    <div class="barcode">
+
+        <svg id="barcode"></svg>
+
+    </div>
+<div style="text-align:center;margin-top:20px;">
+
+<canvas id="qrcode"></canvas>
+
+</div>
+
+    <!-- Buttons -->
+
+    <div class="buttons">
+
+    <button class="print-btn"
+        onclick="printTicket()">
+
+        Print Ticket
+
+    </button>
+
+    <button
+    class="close-btn"
+    onclick="window.location.href='index.html'"
+>
+    Close
+</button>
+
+    <button id="pdfBtn"
+        onclick="downloadPDF()">
+
+        Download PDF
+
+    </button>
+
+    <button id="emailBtn"
+        onclick="sendTicketEmail()">
+
+        Email Ticket
+
+    </button>
+
+</div>
+
+</div>
+
+
+<script>
+
+async function loadTicket(){
+
+    try{
+
+        // ================= GET PNR =================
+
+        const params =
+        new URLSearchParams(window.location.search);
+
+        const pnr =
+        params.get("pnr");
+
+        console.log("PNR:", pnr);
+
+        // ================= API =================
+
+        const response =
+        await fetch(`/api/ticket/${pnr}`);
+
+        const data =
+        await response.json();
+
+        console.log(data);
+
+        // ================= NO DATA =================
+
+        if(!data.success){
+
+            alert("Ticket Not Found");
+
+            return;
+
+        }
+
+        const booking =
+        data.booking;
+
+        // ================= LOAD DETAILS =================
+
+        document.getElementById("pnr").innerText =
+        booking.pnr || "--";
+
+        document.getElementById("tripId").innerText =
+        booking.pnr || "--";
+
+        document.getElementById("from").innerText =
+        booking.origin || "--";
+
+        document.getElementById("to").innerText =
+        booking.destination || "--";
+
+        document.getElementById("date").innerText =
+        booking.date || "--";
+
+        document.getElementById("flightNo").innerText =
+        booking.flightNo || "--";
+
+        document.getElementById("departure").innerText =
+        booking.departure || "--";
+
+        document.getElementById("arrival").innerText =
+        booking.arrival || "--";
+
+        document.getElementById("baseFare").innerText =
+        "₹" + (booking.amount || 0);
+
+        document.getElementById("taxes").innerText =
+        "₹0";
+
+        document.getElementById("totalFare").innerText =
+        "₹" + (booking.amount || 0);
+
+        // ================= PASSENGERS =================
+
+        let rows = "";
+
+        if(
+
+            booking.passengers &&
+
+            booking.passengers.length > 0
+
+        ){
+
+           booking.passengers.forEach((passenger,index)=>{
+
+rows += `
+
+<tr>
+
+<td>${index + 1}</td>
+
+<td>
+
+${passenger.name ||
+
+(passenger.firstName || '') + ' ' +
+
+(passenger.lastName || '')
+
+|| '--'}
+
+</td>
+
+<td>
+
+${passenger.type || 'Adult'}
+
+</td>
+
+<td>
+
+${passenger.gender || '-'}
+
+</td>
+
+<td>
+
+${passenger.seat || 'Auto'}
+
+</td>
+
+<td>
+
+${booking.status || 'CONFIRMED'}
+
+</td>
+
+</tr>
+
+`;
+
+});
+
+        }
+
+        else{
+
+            rows = `
+
+            <tr>
+
+                <td colspan="6">
+
+                    No Passenger Found
+
+                </td>
+
+            </tr>
+
+            `;
+
+        }
+
+        document.getElementById("passengerTable").innerHTML =
+        rows;
+
+        // ================= BARCODE =================
+
+        if(window.JsBarcode){
+
+            JsBarcode(
+
+                "#barcode",
+
+                booking.pnr,
+
+                {
+
+                    format:"CODE128",
+
+                    width:2,
+
+                    height:50,
+
+                    displayValue:true
+
+                }
+
+            );
+
+        }
+
+const qrData = JSON.stringify({
+
+    pnr: booking.pnr,
+    airline: booking.airline,
+    flightNo: booking.flightNo,
+    airlinePnr: booking.airlinePnr,
+
+    origin: booking.origin,
+    destination: booking.destination,
+
+    departure: booking.departure,
+    arrival: booking.arrival,
+
+    date: booking.date,
+
+    passengers: booking.passengers
+
+});
+
+QRCode.toCanvas(
+
+    document.getElementById("qrcode"),
+
+    qrData,
+
+    {
+        width: 200
+    },
+
+    function(error){
+
+        if(error){
+
+            console.log(error);
+
+        }else{
+
+            console.log("QR Created");
+
+        }
+
+    }
+
+);
+        // ================= ENABLE BUTTONS =================
+
+        const pdfBtn =
+        document.getElementById("pdfBtn");
+
+        const emailBtn =
+        document.getElementById("emailBtn");
+
+         const PDFBtn =
+        document.getElementById("downloadPDFBtn");
+
+
+    }
+
+    catch(err){
+
+        console.log(err);
+
+        alert("Ticket Loading Error");
+
+    }
+
+}
+
+// ================= LOAD =================
+
+window.onload = loadTicket;
+
+// ================= PRINT =================
+
+function printTicket(){
+
+    window.print();
+
+}
+// ================= PDF =================
+
+async function downloadPDF(){
+
+    try{
+
+        const { jsPDF } = window.jspdf;
+
+        const ticket =
+        document.querySelector(".ticket");
+
+        const canvas =
+        await html2canvas(ticket);
+
+        const imgData =
+        canvas.toDataURL("image/png");
+
+        const pdf =
+        new jsPDF(
+
+            'p',
+            'mm',
+            'a4'
+
+        );
+
+        pdf.addImage(
+
+            imgData,
+
+            'PNG',
+
+            0,
+
+            0,
+
+            210,
+
+            297
+
+        );
+
+        pdf.save(
+
+            `Ticket-${Date.now()}.pdf`
+
+        );
+
+    }
+
+    catch(err){
+
+        console.log(err);
+
+        alert("PDF Failed");
+
+    }
+
+}// ================= EMAIL =================
+
+async function sendTicketEmail(){
+
+    try{
+
+        const params =
+        new URLSearchParams(window.location.search);
+
+        const pnr =
+        params.get("pnr");
+
+        const res =
+        await fetch(`/booking/ticket/${pnr}`);
+
+        
+
+        const data =
+        await res.json();
+
+        alert(
+
+            data.message ||
+
+            "Email Sent"
+
+        );
+
+    }
+
+    catch(err){
+
+        console.log(err);
+
+        alert("Email Failed");
+
+    }
+
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,34 @@
+<h2>My Bookings ✈️</h2>
+<div id="bookings"></div>
+
+<script>
+async function loadBookings() {
+    const res = await fetch('/my-bookings');
+    const data = await res.json();
+
+    let html = '';
+
+    data.forEach(b => {
+        html += `
+        <div style="border:1px solid #ccc; padding:10px; margin:10px;">
+            <h3>${b.destination}</h3>
+            <p>Date: ${b.date}</p>
+            <p>Persons: ${b.persons}</p>
+            <p>Amount: ₹${b.amount}</p>
+            <button onclick="downloadTicket('${b._id}')">Download Ticket</button>
+        </div>
+        `;
+    });
+
+    document.getElementById('bookings').innerHTML = html;
+}function downloadTicket(id) {
+    window.open('/ticket/' + id);
+}
+<button onclick="cancelBooking('BOOKING_ID')">
+    Cancel
+</button>
+
+
+loadBookings();
+<td>${booking.status}</td>
+</script>

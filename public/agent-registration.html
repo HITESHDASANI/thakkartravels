@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Agent Registration</title>
+
+<style>
+
+body{
+    font-family:Arial;
+    background:#f5f7fa;
+    padding:20px;
+}
+
+.container{
+    max-width:900px;
+    margin:auto;
+    background:#fff;
+    padding:25px;
+    border-radius:10px;
+}
+
+h2{
+    background:#0b3d91;
+    color:#fff;
+    padding:10px;
+}
+
+input,select{
+    width:100%;
+    padding:10px;
+    margin:8px 0;
+}
+
+button{
+    background:#0b3d91;
+    color:white;
+    border:none;
+    padding:12px 20px;
+    cursor:pointer;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Agent Registration Form</h2>
+
+<form id="agentForm" enctype="multipart/form-data">
+
+<h3>Company Details</h3>
+
+<input type="text" name="companyName" placeholder="Company Name" required>
+
+<input type="text" name="contactNumber" placeholder="Mobile Number" required>
+
+<input type="email" name="email" placeholder="Email" required>
+
+<input type="password" name="password" placeholder="Password" required>
+
+<input type="text" name="country" placeholder="Country">
+
+<input type="text" name="address1" placeholder="Address Line 1">
+
+<input type="text" name="address2" placeholder="Address Line 2">
+
+<input type="text" name="city" placeholder="City">
+
+<input type="text" name="state" placeholder="State">
+
+<input type="text" name="pincode" placeholder="Pincode">
+
+<h3>PAN Details</h3>
+
+<input type="text" name="panName" placeholder="PAN Holder Name">
+
+<input type="text" name="panNumber" placeholder="PAN Number">
+
+<input type="file" name="panFile">
+
+<h3>GST Details</h3>
+
+<input type="text" name="gstHolder" placeholder="GST Holder Name">
+
+<input type="text" name="gstNumber" placeholder="GST Number">
+
+<input type="file" name="gstFile">
+
+<h3>Address Proof</h3>
+
+<input type="file" name="addressProofFile">
+
+<input type="hidden" name="role" value="agent">
+
+<br><br>
+
+<button type="submit">
+Register Agent
+</button>
+
+</form>
+
+</div>
+<div id="otpSection" style="display:none">
+
+<h3>Verify Email OTP</h3>
+
+<input
+    type="email"
+    id="otpEmail"
+    placeholder="Email"
+>
+
+<input
+    type="text"
+    id="otp"
+    placeholder="Enter OTP"
+>
+
+<button onclick="verifyOtp()">
+Verify OTP
+</button>
+
+</div>
+
+<script>
+
+document.getElementById("agentForm")
+.addEventListener("submit", async function(e){
+
+    e.preventDefault();
+
+    const formData =
+    new FormData(this);
+
+    const res =
+    await fetch('/auth/register',{
+
+        method:'POST',
+        body:formData
+
+    });
+
+    const data =
+    await res.json();
+
+    alert(
+        data.message ||
+        data.error
+    );
+
+});
+const data = await res.json();
+
+if(data.message){
+
+    document.getElementById(
+        "otpSection"
+    ).style.display = "block";
+
+    document.getElementById(
+        "otpEmail"
+    ).value =
+    formData.get("email");
+
+    alert("OTP Sent Successfully");
+}
+async function verifyOtp(){
+
+    const res = await fetch(
+        "/auth/verify-otp",
+        {
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body:JSON.stringify({
+                email:
+                document.getElementById("otpEmail").value,
+                otp:
+                document.getElementById("otp").value
+            })
+        }
+    );
+
+    const data = await res.json();
+
+    alert(
+        data.message || data.error
+    );
+
+}
+</script>
+
+</body>
+</html>
