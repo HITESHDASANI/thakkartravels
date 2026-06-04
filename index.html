@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+  <style>
+
+body{
+
+    font-family:Arial;
+    background:#f4f7fb;
+    margin:0;
+
+}
+
+/* SEARCH BOX */
+
+.search-box{
+
+    background:white;
+    padding:25px;
+    border-radius:20px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.08);
+    margin:20px;
+
+}
+
+.search-box h2{
+
+    margin-top:0;
+    color:#0b3d91;
+
+}
+
+.search-row{
+
+    display:flex;
+    gap:15px;
+    flex-wrap:wrap;
+
+}
+
+.search-row input,
+.search-row select{
+
+    padding:12px;
+    border:1px solid #ddd;
+    border-radius:10px;
+    min-width:180px;
+
+}
+
+.search-btn{
+
+    background:#0b3d91;
+    color:white;
+    border:none;
+    padding:12px 25px;
+    border-radius:10px;
+    cursor:pointer;
+    font-size:26px;
+
+}
+
+.search-btn:hover{
+
+    background:#082c6c;
+
+}
+
+/* FLIGHT CARD */
+
+.flight-card{
+
+    background:white;
+    border-radius:18px;
+    padding:40px;
+    margin:20px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.08);
+    border-left:6px solid #0b3d91;
+
+}
+
+.flight-top{
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+
+}
+
+.airline{
+
+    font-size:22px;
+    font-weight:bold;
+    color:#0b3d91;
+
+}
+
+.flightno{
+
+    color:#666;
+    font-size:14px;
+
+}
+
+.price{
+
+    font-size:36px;
+    color:#059669;
+    font-weight:bold;
+
+}
+
+/* ROUTE */
+
+.route{
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-top:20px;
+
+}
+
+.city{
+
+    text-align:center;
+
+}
+
+.city h3{
+
+    margin:0;
+    font-size:36px;
+
+}
+
+.city p{
+
+    margin:5px 0;
+    color:#666;
+
+}
+
+.line{
+
+    flex:1;
+    height:2px;
+    background:#ddd;
+    margin:0 15px;
+    position:relative;
+
+}
+
+.line::after{
+
+    content:'✈';
+    position:absolute;
+    top:-12px;
+    left:50%;
+    transform:translateX(-50%);
+    background:white;
+    padding:0 5px;
+    color:#0b3d91;
+
+}
+
+/* EXTRA */
+
+.extra{
+
+    margin-top:20px;
+    display:flex;
+    justify-content:space-between;
+    color:#555;
+    font-size:14px;
+
+}
+
+.book-btn{
+
+    margin-top:20px;
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:12px;
+    background:#0b3d91;
+    color:white;
+    font-size:16px;
+    cursor:pointer;
+
+}
+
+.book-btn:hover{
+
+    background:#082c6c;
+
+}
+
+/* SOURCE */
+
+.source{
+
+    padding:6px 12px;
+    border-radius:20px;
+    color:white;
+    font-size:12px;
+    font-weight:bold;
+
+}
+
+.efly{
+
+    background:#2563eb;
+
+}
+
+.mongodb{
+
+    background:#059669;
+
+}
+/* ================= CONTACT SECTION ================= */
+
+.contact-section{
+
+    width:100%;
+
+    padding:30px 20px;
+
+    background:#f5f5f5;
+
+}
+
+.contact-container{
+
+    max-width:1300px;
+
+    margin:auto;
+
+    display:flex;
+
+    gap:15px;
+
+    align-items:stretch;
+
+    flex-wrap:wrap;
+
+}
+
+.contact-box{
+
+    flex:1;
+
+    min-width:320px;
+
+    background:#fff;
+
+    padding:15px;
+
+    border-radius:15px;
+
+    box-shadow:0 5px 20px rgba(0,0,0,0.08);
+
+}
+
+.contact-box h2{
+
+    font-size:22px;
+
+    color:#111;
+
+    margin-bottom:10px;
+
+    font-weight:700;
+
+}
+
+.line{
+
+    width:80px;
+
+    height:6px;
+
+    background:#ffd400;
+
+    margin-bottom:35px;
+
+}
+
+.contact-item{
+
+    display:flex;
+
+    gap:20px;
+
+    align-items:flex-start;
+
+    padding:20px 0;
+
+    border-bottom:1px solid #eee;
+
+}
+
+.contact-item:last-child{
+
+    border-bottom:none;
+
+}
+
+.icon{
+
+    width:55px;
+
+    height:55px;
+
+    background:#ffd400;
+
+    border-radius:50%;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:28px;
+
+    flex-shrink:0;
+
+}
+
+.contact-item h3{
+
+    font-size:28px;
+
+    margin-bottom:8px;
+
+    color:#111;
+
+}
+
+.contact-item p{
+
+    font-size:22px;
+
+    color:#444;
+
+    line-height:1.6;
+
+}
+
+.map-box{
+
+    flex:1.4;
+
+    min-width:200px;
+
+    height:350px;
+
+    border-radius:15px;
+
+    overflow:hidden;
+
+    box-shadow:0 5px 20px rgba(0,0,0,0.08);
+
+}
+
+/* ================= MOBILE ================= */
+
+@media(max-width:768px){
+
+    .contact-container{
+
+        flex-direction:column;
+
+    }
+
+    .map-box{
+
+        height:400px;
+
+    }
+
+    .contact-box h2{
+
+        font-size:32px;
+
+    }
+
+    .contact-item h3{
+
+        font-size:22px;
+
+    }
+
+    .contact-item p{
+
+        font-size:18px;
+
+    }
+
+}
+#swapBtn{
+
+    background:#ffd400;
+
+    border:none;
+
+    width:45px;
+
+    height:45px;
+
+    border-radius:50%;
+
+    font-size:22px;
+
+    cursor:pointer;
+
+    margin:0 10px;
+
+    font-weight:bold;
+
+}
+</style>
+<head>
+  <meta charset="UTF-8">
+  <title>Thakkar Travels | Flight Booking</title>
+  <link rel="stylesheet" href="style.css">
+  <div style="float:right">
+
+
+</div>
+</head>
+<body>
+
+<header class="topbar">
+
+<div class="leftbox">
+
+<img src="logo.png" class="logo">
+
+<div>
+
+<h1>Thakkar Travels</h1>
+
+₹ <span id="balance">0</span>
+
+</div>
+
+</div>
+
+<div class="rightbox">
+
+<button
+id="panelBtn"
+onclick="toggleMenu()">
+
+⚙ Control Panel
+
+</button>
+
+<div
+id="controlMenu"
+class="menu">
+
+<a href="profile.html">
+👤 My Profile
+</a>
+
+<a href="reset.html">
+🔒 Change Password
+</a>
+
+<a href="ledger.html">
+💰 Transaction Details
+</a>
+
+<a href="calendar.html">
+📅 My Calendar
+</a>
+
+<a href="#">
+🧾 Ticket Invoice
+</a>
+
+<a href="#"
+onclick="logoutUser()">
+
+🚪 Logout
+
+</a>
+
+</div>
+
+</div>
+
+</header>
+
+
+<nav>
+  <a href="index.html">Home</a>
+  <a href="booking.html">Book Flight</a>
+  <a href="contact.html">Contact</a>
+  <a href="privacy.html">Privacy</a>
+  <a href="refund.html">Refund</a>
+  <a href="cancellation.html">Cancellation</a>
+    
+    <a href="booking.html">Booking</a>
+    <a href="login.html"><button>Login</button>
+    
+</a>
+
+  
+</nav>
+
+<section class="search">
+  <input list="airports" id="from">
+  <button id="swapBtn">⇄</button>
+<input list="airports" id="to">
+
+<datalist id="airports">
+<option value="CCU">
+<option value="DEL">
+<option value="BOM">
+<option value="BLR">
+<option value="HYD">
+<option value="MAA">
+<option value="TIR">
+<option value="IXZ">
+<option value="IXM">
+<option value="GOX">
+</datalist>
+
+</select>
+
+
+
+
+
+</select>
+  <input id="date" type="date">
+  <div class="pax-box">
+
+<label>Adults</label>
+
+<select id="adults">
+
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+
+</select>
+
+<label>Child</label>
+
+<select id="child">
+
+<option value="0">0</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+
+</select>
+
+<label>Infant</label>
+
+<select id="infant">
+
+<option value="0">0</option>
+<option value="1">1</option>
+<option value="2">2</option>
+
+</select>
+
+</div>
+
+  
+  <button type="button" onclick="searchFlights()">Search Flights</button>
+  
+</section>
+<!-- ================= CONTACT SECTION ================= -->
+
+<section class="contact-section">
+
+    <div class="contact-container">
+
+        <!-- LEFT CONTACT DETAILS -->
+
+        <div class="contact-box">
+
+            <h2>Contact Us</h2>
+
+            <div class="line"></div>
+
+            <div class="contact-item">
+
+                <div class="icon">📍</div>
+
+                <div>
+
+                    <h3>Thakkar Travels</h3>
+
+                    <p>
+                        71, Canning Street<br>
+                        4th Floor B -444<br>
+                        Kolkata 700001
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="contact-item">
+
+                <div class="icon">📞</div>
+
+                <div>
+
+                    <h3>Mobile No.</h3>
+
+                    <p>9433090837</p>
+
+                </div>
+
+            </div>
+
+            <div class="contact-item">
+
+                <div class="icon">✉️</div>
+
+                <div>
+
+                    <h3>Email</h3>
+
+                    <p>
+                        thakkartravels.dasani@gmail.com
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="contact-item">
+
+                <div class="icon">⏰</div>
+
+                <div>
+
+                    <h3>Working Hours</h3>
+
+                    <p>
+                        Monday - Sunday<br>
+                        10:00 AM - 7:00 PM
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- RIGHT MAP -->
+
+        <div class="map-box">
+
+            <iframe
+
+                src="https://www.google.com/maps?q=71%20Canning%20Street%20Kolkata&output=embed"
+
+                width="100%"
+
+                height="100%"
+
+                style="border:0;"
+
+                allowfullscreen=""
+
+                loading="lazy">
+
+            </iframe>
+
+        </div>
+
+    </div>
+
+</section>
+
+<div id="results"></div>
+
+<footer id="contact"><h2>Thakkar Travels</h2>
+  <p>All Right Reserved By Thakkar Travels</p>
+</footer>
+
+<!-- ✅ MOVE SCRIPT INSIDE BODY -->
+<script>
+
+console.log("INDEX LOADED");
+
+function toggleMenu(){
+
+document
+.getElementById(
+'controlMenu'
+)
+.classList.toggle(
+'show'
+);
+
+}
+
+async function loadUser(){
+
+try{
+
+const res =
+await fetch(
+'/auth/me',
+{
+credentials:
+'include'
+}
+);
+
+const user =
+await res.json();
+
+document
+.getElementById(
+'balance'
+).innerText =
+user.balance || 0;
+
+}
+catch(err){
+
+console.log(err);
+
+}
+
+}
+
+function checkBalance(){
+
+alert(
+"Current Balance ₹ " +
+document
+.getElementById(
+'balance'
+).innerText
+);
+
+}
+
+async function logoutUser(){
+
+await fetch(
+'/auth/logout',
+{
+method:'POST',
+credentials:
+'include'
+}
+);
+
+window.location=
+'login.html';
+
+}
+
+function searchFlights(){
+
+const origin =
+document.getElementById('from').value;
+
+const destination =
+document.getElementById('to').value;
+
+const date =
+document.getElementById('date').value;
+
+const adults =
+document.getElementById('adults').value || 1;
+
+const child =
+document.getElementById('child').value || 0;
+
+const infant =
+document.getElementById('infant').value || 0;
+
+if(
+!origin ||
+!destination ||
+!date
+){
+
+alert('Fill all fields');
+
+return;
+
+}
+
+window.location.href =
+
+`/flights.html?origin=${origin}&destination=${destination}&departuredate=${date}&adults=${adults}&child=${child}&infant=${infant}&trip_type=ow`;
+
+}
+
+loadUser();
+
+</script><script>
+
+document
+.getElementById('swapBtn')
+.addEventListener('click',()=>{
+
+    const from =
+    document.getElementById('from');
+
+    const to =
+    document.getElementById('to');
+
+    const temp = from.value;
+
+    from.value = to.value;
+
+    to.value = temp;
+
+});
+
+</script>
+
+</body>
+</html>
