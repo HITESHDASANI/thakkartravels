@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 node_modules/
 .env
 logs/
@@ -8,15 +7,5 @@ uploads/
 tickets/
 
 .vscode/
-=======
-node_modules/
-.env
-logs/
-*.log
 
-uploads/
-tickets/
-
-.vscode/
->>>>>>> 1aa306b (Initial commit)
 .DS_Store
